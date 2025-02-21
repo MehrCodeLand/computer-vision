@@ -1,0 +1,5 @@
+1 - an image has which features 
+
+2 - image features and interesting points 
+
+3 - type of image 
