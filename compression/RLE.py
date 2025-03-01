@@ -29,9 +29,28 @@ def rle_encode(pixels):
     
     return values, counts
 
+def rle_decode(values, counts, shape):
+    pixels = np.concatenate([np.full(c, v, dtype=np.uint8) for v, c in zip(values, counts)])
+    return pixels.reshape(shape)
 
 
+
+
+
+# encode the image
 values , counts = rle_encode(pixels)
+
+# show original image first 
+cv2.imshow('orginal binary' , binary_image)
+cv2.waitKey()
+
+# decode image (numbers)
+decoded_image = rle_decode(values, counts, binary_image.shape)
+cv2.imshow('decode' , decoded_image)
+cv2.waitKey()
+cv2.destroyAllWindows()
+
+
 
 # finding diffrent space 
 import sys 
