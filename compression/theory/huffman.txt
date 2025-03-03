@@ -1,0 +1,124 @@
+Why Was Huffman Coding Created?
+Before Huffman coding, most compression methods used fixed-length encoding. The main problem was:
+
+Fixed-length encoding wastes space:
+Example: If you store English text with ASCII (8 bits per character), then every character, whether ‘e’ (very common) or ‘z’ (rare), takes the same 8 bits.
+The average length of English words means some characters appear more frequently than others. Fixed-length encoding doesn’t take advantage of this!
+Inefficient for large-scale data transmission:
+When transferring large files (images, audio, text), reducing data size is crucial.
+Efficient compression means faster transmission and lower storage costs.
+Huffman solved these problems by assigning shorter codes to more frequent characters and longer codes to rare characters, thereby reducing the overall file size.
+
+The Theory Behind Huffman Coding
+Huffman coding is based on prefix coding and variable-length encoding, meaning:
+No code is a prefix of another (avoiding decoding confusion).
+More frequent values get shorter codes (to optimize compression).
+The core principle is Shannon's Entropy Theory, which states:
+"The optimal number of bits needed to store a symbol is proportional to its probability
+of occurring."
+
+This means:
+If a symbol appears often, it should have a shorter bit representation.
+If a symbol appears rarely, it can afford a longer bit representation.
+Huffman coding builds an optimal binary tree to assign codes based on probabilities, ensuring minimum bit usage.
+
+How Huffman Coding Works
+Step 1: Frequency Analysis
+First, we count the occurrences of each pixel value (or character) in the data.
+
+Step 2: Building a Huffman Tree
+A binary tree is created where:
+Least frequent symbols are placed at the deepest levels (longer codes).
+Most frequent symbols are placed at the top of the tree (shorter codes).
+The tree is built using a min-heap structure.
+
+Step 3: Assign Huffman Codes
+Assign 0 to the left branch and 1 to the right branch.
+Traverse the tree to generate unique binary codes for each pixel value.
+
+Step 4: Encode the Data
+Replace each symbol with its corresponding Huffman code.
+
+Step 5: Decode by Traversing the Tree
+Read each bit and traverse the tree to find the original symbols.
+
+
+Huffman Coding in Image Processing
+Huffman coding is widely used in image processing for lossless compression and entropy
+coding. It helps reduce the file size of images without losing any information by encoding
+pixel values based on their frequency.
+
+1. Where is Huffman Coding Used in Image Processing?
+1️⃣ JPEG Compression (Entropy Coding Stage)
+📌 How Huffman is Used:
+JPEG uses Discrete Cosine Transform (DCT) to convert an image into frequency components.
+After quantization, Huffman coding is applied to the DCT coefficients to efficiently store 
+image data.This significantly reduces file size while maintaining high quality.
+
+✅ Why?
+Huffman coding reduces redundant bit storage for compressed JPEG images.
+It ensures that frequent pixel intensity values are stored with shorter codes, 
+optimizing space.
+🖼️ Example:
+A high-quality image can be reduced by 50-60% using JPEG Huffman encoding.
+
+2️⃣ PNG (Portable Network Graphics) – Deflate Compression
+📌 How Huffman is Used:
+PNG images use the Deflate algorithm, which combines:
+Lempel-Ziv-Welch (LZW) compression
+Huffman coding for entropy reduction.
+Huffman coding is used to encode repeated patterns in
+the image more efficiently.
+
+✅ Why?
+Unlike JPEG, PNG uses lossless compression, making it perfect for images with 
+text, graphics, and transparent backgrounds.
+🖼️ Example:
+A 500 KB BMP image can be reduced to 150 KB in PNG format with Huffman-based Deflate.
+
+
+3️⃣ GIF (Graphics Interchange Format) – LZW + Huffman
+📌 How Huffman is Used:
+GIF images use Lempel-Ziv-Welch (LZW) encoding, which internally applies Huffman coding.
+This helps store indexed color images efficiently.
+✅ Why?
+GIFs are designed for low-bit depth images (256 colors), and Huffman coding optimizes their storage.
+🖼️ Example:
+
+GIF files are smaller than BMP due to Huffman-based compression.
+
+5️⃣ Image Segmentation and Object Recognition
+📌 How Huffman is Used:
+Huffman coding is used to compress binary segmentation masks.
+In applications like face detection, object recognition, and OCR, Huffman is applied to reduce storage needs.
+✅ Why?
+Binary segmentation masks contain large areas of uniform pixels, making them perfect for Huffman compression.
+🖼️ Example:
+Object detection models (YOLO, Mask R-CNN) use Huffman encoding to store region masks efficiently.
+
+
+[ (100, 5), (200, 7), (50, 10), (150, 15) ]
+1 -
+New Node: (None, 5+7=12)
+Updated Heap: [ (50, 10), (150, 15), (None, 12) ]
+
+2 - 
+New Node: (None, 10+12=22)
+Updated Heap: [ (150, 15), (None, 22) ]
+
+3 - 
+New Node: (None, 10+12=22)
+Updated Heap: [ (150, 15), (None, 22) ]
+
+
+4 - 
+New Node: (None, 15+22=37)
+Huffman Tree Complete!
+
+       (*, 37)
+      /      \
+   (150,15)  (*,22)
+            /      \
+        (50,10)   (*,12)
+                 /      \
+           (100,5)   (200,7)
