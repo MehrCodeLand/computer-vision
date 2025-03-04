@@ -1,0 +1,8 @@
+Understanding Masking in OpenCV and Image Processing
+1. What is Masking in Image Processing?
+Masking is a technique used to selectively process certain regions of an image. A mask is essentially a binary or grayscale image that determines which pixels of the input image should be kept, modified, or ignored. In OpenCV, masks are often used for:
+
+Filtering: Applying operations only to selected areas.
+Object Segmentation: Extracting specific objects from an image.
+Feature Detection: Focusing on regions of interest (ROI).
+Blending & Inpainting: Selecting areas for processing like blurring, sharpening, or filling missing parts.
