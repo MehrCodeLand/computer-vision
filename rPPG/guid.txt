@@ -1,0 +1,146 @@
+Signal Processing and Blood Pressure Estimation System
+This document provides a detailed breakdown of the system's functions, their roles, expected outcomes, and how they work together to analyze physiological signals.
+
+---
+
+1. Filter Design Functions
+
+butter_bandpass(lowcut, highcut, fs, order=5)
+
+- Purpose:  
+  Designs a Butterworth bandpass filter to allow frequencies between `lowcut` and `highcut` to pass.
+- Inputs:  
+  - `lowcut`: Lower bound of the frequency range (e.g., 0.7 Hz for heart rate).
+  - `highcut`: Upper bound of the frequency range (e.g., 4.0 Hz for heart rate).
+  - `fs`: Sampling frequency (e.g., 30.0 Hz).
+  - `order`: The filter order controlling the steepness of the roll-off.
+- Output:  
+  Filter coefficients (`b` and `a`) describing the filter’s behavior.
+- Expected Outcome:  
+  Coefficients are used to filter the signal in subsequent steps.
+
+bandpass_filter(data, lowcut, highcut, fs, order=5)
+
+- Purpose:  
+  Applies the Butterworth bandpass filter to input data.
+- Inputs:  
+  - `data`: The raw signal (e.g., average green channel values).
+  - `lowcut`, `highcut`, `fs`, `order`: Parameters as described above.
+- Output:  
+  Filtered data (`y`) with reduced noise and unwanted frequency components.
+- Expected Outcome:  
+  A clean signal emphasizing heart rate frequency components.
+
+---
+
+2. Blood Pressure Estimation Function
+
+
+estimate_blood_pressure(heart_rate, filtered_signal)
+
+- Purpose:  
+  Provides a dummy estimation of blood pressure based on heart rate and filtered signal amplitude.
+- Inputs:  
+  - `heart_rate`: Calculated beats per minute (BPM).
+  - `filtered_signal`: Bandpass-filtered signal.
+- Output:  
+  - `systolic`: Estimated systolic blood pressure.
+  - `diastolic`: Estimated diastolic blood pressure.
+- Expected Outcome:  
+  Gives placeholder blood pressure values based on signal characteristics.
+
+---
+
+3. Video Capture and ROI Selection
+
+Video Capture  
+
+- Opens webcam connection using `cv2.VideoCapture(0)`.  
+- Each frame is processed for:
+  - RGB conversion (for signal processing).
+  - Grayscale conversion (for face detection).
+
+Face Detection and ROI Selection  
+
+- Face Detection:  
+  Detects faces using Haar cascade (`haarcascade_frontalface_default.xml`).
+- ROI Selection:  
+  - If a face is detected, selects a small rectangle on the forehead.
+  - If no face is detected, selects a central region of the frame.
+- Expected Outcome:  
+  ROI is highlighted on video and used to extract signal values.
+
+---
+
+4. Signal Extraction and Processing
+
+Extracting the Green Channel Signal
+
+- Process:  
+  Computes the average green channel value in the ROI using `np.mean(roi[:, :, 1])`.
+- Expected Outcome:  
+  Generates a time-series (`green_signal`) reflecting blood flow changes.
+
+Time Stamps  
+
+- Associates each signal value with a time stamp based on frame rate (30 FPS).  
+- Expected Outcome:  
+  Enables signal visualization over time.
+
+Applying the Bandpass Filter  
+
+- Filters `green_signal` using the `bandpass_filter` function.  
+- Expected Outcome:  
+  Produces a cleaner signal emphasizing heart rate-related components.
+
+---
+
+5. Heart Rate and Blood Pressure Estimation
+
+Peak Detection for Heart Rate  
+
+- Process:  
+  Detects peaks in `filtered_signal` using `find_peaks`.
+- Calculation:  
+  Heart rate (BPM) = (Number of peaks / Total time in minutes).
+- Expected Outcome:  
+  Provides an estimated heart rate based on detected peaks.
+
+Blood Pressure Estimation  
+
+- Combines heart rate and signal amplitude to estimate blood pressure values.  
+- Expected Outcome:  
+  Demonstrates how physiological signals might predict blood pressure.
+
+---
+
+6. Visualization
+
+Plotting the Signals
+
+- Subplots:  
+  - Raw green signal vs. time.  
+  - Filtered signal vs. time.
+- Expected Outcome:  
+  Clear visualization of raw and processed signals, highlighting peaks.
+
+Console Output  
+
+- Prints estimated heart rate, systolic, and diastolic blood pressure.  
+- Expected Outcome:  
+  Provides a summary of extracted physiological data.
+
+---
+
+Summary of Function Interactions and Flow
+
+1. Filter Design (`butter_bandpass` and `bandpass_filter`):  
+   Isolates heart rate frequency components.
+2. ROI and Signal Extraction:  
+   Captures video, detects face, and computes green signal from ROI.
+3. Signal Processing:  
+   Filters the signal and detects heartbeats.
+4. Blood Pressure Estimation:  
+   Combines heart rate and signal characteristics for physiological estimations.
+5. Visualization and Output:  
+   Plots signals and provides user-friendly results.
